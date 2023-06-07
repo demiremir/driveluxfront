@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   TextField,
@@ -11,33 +11,104 @@ import {
   DialogContent,
   DialogActions,
 } from '@material-ui/core';
+import axios from 'axios';
 
 const CarsPage = () => {
   const [filter, setFilter] = useState('');
-  const [addCarOpen, setAddCarOpen] = useState(false);
-  const [deleteCarOpen, setDeleteCarOpen] = useState(false);
-  const [carId, setCarId] = useState('');
+  const [carList, setCarList] = useState([]);
+  const [openAddCar, setOpenAddCar] = useState(false);
+  const [openDeleteCar, setOpenDeleteCar] = useState(false);
+  const [addCarData, setAddCarData] = useState({
+    brand: '',
+    model: '',
+    gear: '',
+    km: '',
+    year: '',
+    color: '',
+    dailyRentalPrice: '',
+    image: '',
+    description: '',
+    username: '',
+  });
+  const [deleteCarData, setDeleteCarData] = useState({
+    carId: '',
+  });
+
+  useEffect(() => {
+    // Fetch car list from API
+    fetchCarList();
+  }, []);
+
+  const fetchCarList = async () => {
+    try {
+      const response = await axios.get('/api/cars'); // Replace with your API endpoint
+      setCarList(response.data);
+    } catch (error) {
+      console.error('Error fetching car list:', error);
+    }
+  };
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
   };
 
-  const handleAddCar = () => {
-    setAddCarOpen(true);
+  const handleAddCar = async () => {
+    try {
+      // Send POST request to API with addCarData
+      await axios.post('/api/cars', addCarData); // Replace with your API endpoint
+
+      // Clear addCarData
+      setAddCarData({
+        brand: '',
+        model: '',
+        gear: '',
+        km: '',
+        year: '',
+        color: '',
+        dailyRentalPrice: '',
+        image: '',
+        description: '',
+        username: '',
+      });
+
+      // Fetch updated car list from API
+      fetchCarList();
+
+      // Close add car dialog
+      setOpenAddCar(false);
+    } catch (error) {
+      console.error('Error adding car:', error);
+    }
   };
 
-  const handleDeleteCar = () => {
-    setDeleteCarOpen(true);
+  const handleDeleteCar = async () => {
+    try {
+      // Send DELETE request to API with deleteCarData
+      await axios.delete(`/api/cars/${deleteCarData.carId}`); // Replace with your API endpoint
+
+      // Clear deleteCarData
+      setDeleteCarData({
+        carId: '',
+      });
+
+      // Fetch updated car list from API
+      fetchCarList();
+
+      // Close delete car dialog
+      setOpenDeleteCar(false);
+    } catch (error) {
+      console.error('Error deleting car:', error);
+    }
   };
 
-  const handleAddCarSubmit = () => {
-    // Add car logic
-    setAddCarOpen(false);
-  };
-
-  const handleDeleteCarSubmit = () => {
-    // Delete car logic
-    setDeleteCarOpen(false);
+  const handleFilter = async () => {
+    try {
+      // Send GET request to API with filter query params
+      const response = await axios.get(`/api/cars?filter=${filter}`); // Replace with your API endpoint
+      setCarList(response.data);
+    } catch (error) {
+      console.error('Error filtering car list:', error);
+    }
   };
 
   return (
@@ -62,20 +133,20 @@ const CarsPage = () => {
             onChange={handleFilterChange}
           />
           <TextField
-            label="Km"
+            label="Max Rental Price"
             variant="outlined"
             fullWidth
             value={filter}
             onChange={handleFilterChange}
           />
           <TextField
-            label="Gear Type"
+            label="Min Rental Price"
             variant="outlined"
             fullWidth
             value={filter}
             onChange={handleFilterChange}
           />
-          <Button variant="contained" color="primary" fullWidth>
+          <Button variant="contained" color="primary" fullWidth onClick={handleFilter}>
             Filter
           </Button>
         </Paper>
@@ -85,61 +156,127 @@ const CarsPage = () => {
           <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
             <Typography variant="h6">Car List</Typography>
             <div>
-              <Button variant="contained" color="primary" onClick={handleAddCar}>
+              <Button variant="contained" color="primary" onClick={() => setOpenAddCar(true)}>
                 Add Car
               </Button>
-              <Button variant="contained" color="secondary" onClick={handleDeleteCar}>
+              <Button variant="contained" color="secondary" onClick={() => setOpenDeleteCar(true)}>
                 Delete Car
               </Button>
             </div>
           </Box>
-          {/* Car List */}
+          <Grid container spacing={2} style={{ padding: '16px' }}>
+            {carList.map((car) => (
+              <Grid item xs={4} key={car.id}>
+                <Paper elevation={3} style={{ padding: '16px' }}>
+                  <Typography variant="h6">{car.brand}</Typography>
+                  <Typography variant="subtitle1">{car.model}</Typography>
+                  {/* Display other car details */}
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
         </Paper>
       </Grid>
-
-      {/* Add Car Popup */}
-      <Dialog open={addCarOpen} onClose={() => setAddCarOpen(false)}>
+      {/* Add Car Dialog */}
+      <Dialog open={openAddCar} onClose={() => setOpenAddCar(false)}>
         <DialogTitle>Add Car</DialogTitle>
         <DialogContent>
-          <TextField label="Car Brand" variant="outlined" fullWidth />
-          <TextField label="Model" variant="outlined" fullWidth />
-          <TextField label="Gear" variant="outlined" fullWidth />
-          <TextField label="Km" variant="outlined" fullWidth />
-          <TextField label="Year" variant="outlined" fullWidth />
-          <TextField label="Color" variant="outlined" fullWidth />
-          <TextField label="Daily Rental Price" variant="outlined" fullWidth />
-          <TextField label="Image" variant="outlined" fullWidth />
-          <TextField label="Description" variant="outlined" fullWidth />
-          <TextField label="Username" variant="outlined" fullWidth />
+          {/* Add car form */}
+          <TextField
+            label="Brand"
+            variant="outlined"
+            fullWidth
+            value={addCarData.brand}
+            onChange={(e) => setAddCarData({ ...addCarData, brand: e.target.value })}
+          />
+          <TextField
+            label="Model"
+            variant="outlined"
+            fullWidth
+            value={addCarData.model}
+            onChange={(e) => setAddCarData({ ...addCarData, model: e.target.value })}
+          />
+          <TextField
+            label="Gear"
+            variant="outlined"
+            fullWidth
+            value={addCarData.gear}
+            onChange={(e) => setAddCarData({ ...addCarData, gear: e.target.value })}
+          />
+          <TextField
+            label="Km"
+            variant="outlined"
+            fullWidth
+            value={addCarData.km}
+            onChange={(e) => setAddCarData({ ...addCarData, km: e.target.value })}
+          />
+          <TextField
+            label="Year"
+            variant="outlined"
+            fullWidth
+            value={addCarData.year}
+            onChange={(e) => setAddCarData({ ...addCarData, year: e.target.value })}
+          />
+          <TextField
+            label="Color"
+            variant="outlined"
+            fullWidth
+            value={addCarData.color}
+            onChange={(e) => setAddCarData({ ...addCarData, color: e.target.value })}
+          />
+          <TextField
+            label="Daily Rental Price"
+            variant="outlined"
+            fullWidth
+            value={addCarData.dailyRentalPrice}
+            onChange={(e) => setAddCarData({ ...addCarData, dailyRentalPrice: e.target.value })}
+          />
+          <TextField
+            label="Image"
+            variant="outlined"
+            fullWidth
+            value={addCarData.image}
+            onChange={(e) => setAddCarData({ ...addCarData, image: e.target.value })}
+          />
+          <TextField
+            label="Description"
+            variant="outlined"
+            fullWidth
+            value={addCarData.description}
+            onChange={(e) => setAddCarData({ ...addCarData, description: e.target.value })}
+          />
+          <TextField
+            label="Username"
+            variant="outlined"
+            fullWidth
+            value={addCarData.username}
+            onChange={(e) => setAddCarData({ ...addCarData, username: e.target.value })}
+          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddCarSubmit} color="primary" variant="contained">
+          <Button onClick={() => setOpenAddCar(false)}>Cancel</Button>
+          <Button onClick={handleAddCar} color="primary">
             Add
-          </Button>
-          <Button onClick={() => setAddCarOpen(false)} color="default" variant="contained">
-            Cancel
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* Delete Car Popup */}
-      <Dialog open={deleteCarOpen} onClose={() => setDeleteCarOpen(false)}>
+      {/* Delete Car Dialog */}
+      <Dialog open={openDeleteCar} onClose={() => setOpenDeleteCar(false)}>
         <DialogTitle>Delete Car</DialogTitle>
         <DialogContent>
+          {/* Delete car form */}
           <TextField
             label="Car ID"
             variant="outlined"
             fullWidth
-            value={carId}
-            onChange={(e) => setCarId(e.target.value)}
+            value={deleteCarData.carId}
+            onChange={(e) => setDeleteCarData({ ...deleteCarData, carId: e.target.value })}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCarSubmit} color="secondary" variant="contained">
+          <Button onClick={() => setOpenDeleteCar(false)}>Cancel</Button>
+          <Button onClick={handleDeleteCar} color="secondary">
             Delete
-          </Button>
-          <Button onClick={() => setDeleteCarOpen(false)} color="default" variant="contained">
-            Cancel
           </Button>
         </DialogActions>
       </Dialog>
