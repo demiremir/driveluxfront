@@ -105,3 +105,57 @@ button {
   color: #fff;
   text-decoration: none;
 }
+
+.page-container {
+  display: flex;
+  margin-top: 20px;
+}
+
+.sidebar {
+  width: 300px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-content {
+  margin-bottom: 20px;
+}
+
+.filter-group {
+  margin-bottom: 10px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 80px); /* Sayfanın tamamını kaplayacak şekilde ayarlayın */
+  overflow-y: auto; /* İçeriğin kaydırılabilir olmasını sağlar */
+}
+
+.content h2 {
+  margin-bottom: 10px;
+}
+
+.filter-group input {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.content-container {
+  flex: 1;
+  margin-left: 20px;
+}
