@@ -15,7 +15,7 @@ const SignupForm = () => {
       <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Username:</label>
+          <label>Username</label>
           <input
             type="text"
             value={username}
@@ -24,7 +24,7 @@ const SignupForm = () => {
           />
         </div>
         <div className="form-group">
-          <label>Password:</label>
+          <label>Password</label>
           <input
             type="password"
             value={password}
