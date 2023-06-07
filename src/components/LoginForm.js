@@ -1,44 +1,63 @@
 import React, { useState } from 'react';
+import { Button, TextField, Grid, Paper, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Login işlemlerini gerçekleştir
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleLogin = () => {
+    // API isteği gönderme işlemleri
+    const data = { username, password };
+    axios.post('your_login_api_url', data)
+      .then(response => {
+        // Başarılı giriş işlemiyle ilgili işlemler
+      })
+      .catch(error => {
+        // Hata durumlarıyla ilgili işlemler
+      });
   };
 
   return (
-    <div className="form-container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
+    <Grid container spacing={2} justify="center" alignItems="center" style={{ height: '100vh' }}>
+      <Grid item xs={6}>
+        <Paper style={{ padding: '2rem' }}>
+          <Typography variant="h6" gutterBottom>
+            Login
+          </Typography>
+          <TextField
+            label="Username"
+            variant="outlined"
+            fullWidth
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={handleUsernameChange}
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
+          <TextField
+            label="Password"
+            variant="outlined"
+            fullWidth
             type="password"
-            id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
           />
-        </div>
-        <div className="button-container">
-          <button type="submit">Login</button>
-        </div>
-      </form>
-      <div className="login-link">
-        Don't have an account? <a href="/signup">Sign Up</a>
-      </div>
-    </div>
+          <Button variant="contained" color="primary" fullWidth onClick={handleLogin}>
+            Login
+          </Button>
+          <Button component={Link} to="/signup" color="primary" fullWidth style={{ marginTop: '1rem' }}>
+            Signup
+          </Button>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 

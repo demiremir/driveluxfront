@@ -1,43 +1,63 @@
 import React, { useState } from 'react';
+import { Button, TextField, Grid, Paper, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const SignupForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Burada kayıt işlemlerini gerçekleştirebilirsiniz
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSignup = () => {
+    // API isteği gönderme işlemleri
+    const data = { username, password };
+    axios.post('your_signup_api_url', data)
+      .then(response => {
+        // Başarılı kayıt işlemiyle ilgili işlemler
+      })
+      .catch(error => {
+        // Hata durumlarıyla ilgili işlemler
+      });
   };
 
   return (
-    <div className="form-container">
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Username</label>
-          <input
-            type="text"
+    <Grid container spacing={2} justify="center" alignItems="center" style={{ height: '100vh' }}>
+      <Grid item xs={6}>
+        <Paper style={{ padding: '2rem' }}>
+          <Typography variant="h6" gutterBottom>
+            Signup
+          </Typography>
+          <TextField
+            label="Username"
+            variant="outlined"
+            fullWidth
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
+            onChange={handleUsernameChange}
           />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
+          <TextField
+            label="Password"
+            variant="outlined"
+            fullWidth
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            onChange={handlePasswordChange}
           />
-        </div>
-        <button type="submit">Sign Up</button>
-      </form>
-      <div className="login-link">
-        Already have an account? <Link to="/">Login</Link>
-      </div>
-    </div>
+          <Button variant="contained" color="primary" fullWidth onClick={handleSignup}>
+            Signup
+          </Button>
+          <Button component={Link} to="/" color="primary" fullWidth style={{ marginTop: '1rem' }}>
+            Login
+          </Button>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 
