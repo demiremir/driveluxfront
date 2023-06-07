@@ -3,47 +3,35 @@ import { Button, TextField, Grid, Paper, Typography, Box, Dialog, DialogTitle, D
 
 const CarsPage = () => {
   const [filter, setFilter] = useState('');
-  const [openModal, setOpenModal] = useState(false);
-  const [carData, setCarData] = useState({
-    brand: '',
-    model: '',
-    gear: '',
-    km: '',
-    year: '',
-    color: '',
-    rentalPrice: '',
-    image: '',
-    description: '',
-    username: '',
-  });
+  const [addCarOpen, setAddCarOpen] = useState(false);
+  const [deleteCarOpen, setDeleteCarOpen] = useState(false);
+  const [carId, setCarId] = useState('');
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
   };
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
-  const handleCarDataChange = (e) => {
-    const { name, value } = e.target;
-    setCarData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
   const handleAddCar = () => {
-    // Add car logic using carData state
-    console.log(carData);
-    handleCloseModal();
+    setAddCarOpen(true);
   };
 
   const handleDeleteCar = () => {
+    setDeleteCarOpen(true);
+  };
+
+  const handleAddCarClose = () => {
+    setAddCarOpen(false);
+  };
+
+  const handleDeleteCarClose = () => {
+    setDeleteCarOpen(false);
+  };
+
+  const handleCarIdChange = (e) => {
+    setCarId(e.target.value);
+  };
+
+  const handleDelete = () => {
     // Delete car logic
   };
 
@@ -92,7 +80,7 @@ const CarsPage = () => {
           <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
             <Typography variant="h6">Car List</Typography>
             <div>
-              <Button variant="contained" color="primary" onClick={handleOpenModal}>
+              <Button variant="contained" color="primary" onClick={handleAddCar}>
                 Add Car
               </Button>
               <Button variant="contained" color="secondary" onClick={handleDeleteCar}>
@@ -103,98 +91,37 @@ const CarsPage = () => {
           {/* Car List */}
         </Paper>
       </Grid>
-
-      {/* Add Car Modal */}
-      <Dialog open={openModal} onClose={handleCloseModal} aria-labelledby="add-car-dialog-title">
-        <DialogTitle id="add-car-dialog-title">Add Car</DialogTitle>
+      <Dialog open={addCarOpen} onClose={handleAddCarClose}>
+        <DialogTitle>Add Car</DialogTitle>
+        <DialogContent>
+          {/* Add Car Form */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddCarClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleAddCarClose} color="primary">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={deleteCarOpen} onClose={handleDeleteCarClose}>
+        <DialogTitle>Delete Car</DialogTitle>
         <DialogContent>
           <TextField
-            label="Car Brand"
+            label="Car ID"
             variant="outlined"
             fullWidth
-            name="brand"
-            value={carData.brand}
-            onChange={handleCarDataChange}
-          />
-          <TextField
-            label="Car Model"
-            variant="outlined"
-            fullWidth
-            name="model"
-            value={carData.model}
-            onChange={handleCarDataChange}
-          />
-          <TextField
-            label="Gear Type"
-            variant="outlined"
-            fullWidth
-            name="gear"
-            value={carData.gear}
-            onChange={handleCarDataChange}
-          />
-          <TextField
-            label="Km"
-            variant="outlined"
-            fullWidth
-            name="km"
-            value={carData.km}
-            onChange={handleCarDataChange}
-          />
-          <TextField
-            label="Year"
-            variant="outlined"
-            fullWidth
-            name="year"
-            value={carData.year}
-            onChange={handleCarDataChange}
-          />
-          <TextField
-            label="Color"
-            variant="outlined"
-            fullWidth
-            name="color"
-            value={carData.color}
-            onChange={handleCarDataChange}
-          />
-          <TextField
-            label="Rental Price"
-            variant="outlined"
-            fullWidth
-            name="rentalPrice"
-            value={carData.rentalPrice}
-            onChange={handleCarDataChange}
-          />
-          <TextField
-            label="Image (Base64)"
-            variant="outlined"
-            fullWidth
-            name="image"
-            value={carData.image}
-            onChange={handleCarDataChange}
-          />
-          <TextField
-            label="Description"
-            variant="outlined"
-            fullWidth
-            name="description"
-            value={carData.description}
-            onChange={handleCarDataChange}
-          />
-          <TextField
-            label="Username"
-            variant="outlined"
-            fullWidth
-            name="username"
-            value={carData.username}
-            onChange={handleCarDataChange}
+            value={carId}
+            onChange={handleCarIdChange}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal} color="primary">
+          <Button onClick={handleDeleteCarClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleAddCar} color="primary">
-            Add
+          <Button onClick={handleDelete} color="primary">
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
