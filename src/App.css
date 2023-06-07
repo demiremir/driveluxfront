@@ -112,11 +112,11 @@ button {
 }
 
 .sidebar {
-  width: 300px;
+  width: 200px;
+  background-color: #f8f8f8;
   padding: 20px;
-  background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
 }
 
 .sidebar-content {
@@ -158,4 +158,47 @@ button {
 .content-container {
   flex: 1;
   margin-left: 20px;
+}
+
+.filter-sidebar {
+  margin-bottom: 20px;
+}
+
+.filter-label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.filter-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.filter-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: center;
+}
+
+.filter-button:hover {
+  background-color: #0056b3;
+}
+
+.car-list {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  height: calc(100vh - 40px);
+  flex-grow: 1;
+}
+
+.cars-page {
+  display: flex;
+  align-items: flex-start;
+  flex-grow: 1;
 }
