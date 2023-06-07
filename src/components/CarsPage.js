@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { Button, TextField, Grid, Paper, Typography, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
+import {
+  Button,
+  TextField,
+  Grid,
+  Paper,
+  Typography,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@material-ui/core';
 
 const CarsPage = () => {
   const [filter, setFilter] = useState('');
@@ -19,20 +30,14 @@ const CarsPage = () => {
     setDeleteCarOpen(true);
   };
 
-  const handleAddCarClose = () => {
+  const handleAddCarSubmit = () => {
+    // Add car logic
     setAddCarOpen(false);
   };
 
-  const handleDeleteCarClose = () => {
-    setDeleteCarOpen(false);
-  };
-
-  const handleCarIdChange = (e) => {
-    setCarId(e.target.value);
-  };
-
-  const handleDelete = () => {
+  const handleDeleteCarSubmit = () => {
     // Delete car logic
+    setDeleteCarOpen(false);
   };
 
   return (
@@ -91,21 +96,34 @@ const CarsPage = () => {
           {/* Car List */}
         </Paper>
       </Grid>
-      <Dialog open={addCarOpen} onClose={handleAddCarClose}>
+
+      {/* Add Car Popup */}
+      <Dialog open={addCarOpen} onClose={() => setAddCarOpen(false)}>
         <DialogTitle>Add Car</DialogTitle>
         <DialogContent>
-          {/* Add Car Form */}
+          <TextField label="Car Brand" variant="outlined" fullWidth />
+          <TextField label="Model" variant="outlined" fullWidth />
+          <TextField label="Gear" variant="outlined" fullWidth />
+          <TextField label="Km" variant="outlined" fullWidth />
+          <TextField label="Year" variant="outlined" fullWidth />
+          <TextField label="Color" variant="outlined" fullWidth />
+          <TextField label="Daily Rental Price" variant="outlined" fullWidth />
+          <TextField label="Image" variant="outlined" fullWidth />
+          <TextField label="Description" variant="outlined" fullWidth />
+          <TextField label="Username" variant="outlined" fullWidth />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddCarClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleAddCarClose} color="primary">
+          <Button onClick={handleAddCarSubmit} color="primary" variant="contained">
             Add
+          </Button>
+          <Button onClick={() => setAddCarOpen(false)} color="default" variant="contained">
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={deleteCarOpen} onClose={handleDeleteCarClose}>
+
+      {/* Delete Car Popup */}
+      <Dialog open={deleteCarOpen} onClose={() => setDeleteCarOpen(false)}>
         <DialogTitle>Delete Car</DialogTitle>
         <DialogContent>
           <TextField
@@ -113,15 +131,15 @@ const CarsPage = () => {
             variant="outlined"
             fullWidth
             value={carId}
-            onChange={handleCarIdChange}
+            onChange={(e) => setCarId(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCarClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDelete} color="primary">
+          <Button onClick={handleDeleteCarSubmit} color="secondary" variant="contained">
             Delete
+          </Button>
+          <Button onClick={() => setDeleteCarOpen(false)} color="default" variant="contained">
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
