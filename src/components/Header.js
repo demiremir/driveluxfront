@@ -1,10 +1,10 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, makeStyles, Button, Link } from '@material-ui/core';
+import { AppBar, Toolbar, makeStyles, Button} from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    backgroundColor: '#2196f3',
+    backgroundColor: 'primary',
   },
   title: {
     flexGrow: 1,
