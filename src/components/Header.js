@@ -23,9 +23,9 @@ const Header = () => {
   return (
     <AppBar position="static" className={classes.appBar}>
       <Toolbar>
-        <Typography variant="h6" className={classes.title}>
+      <Button component={RouterLink} to="/" color="inherit" className={classes.link}>
           DriveLux
-        </Typography>
+        </Button>
         <Button component={RouterLink} to="/" color="inherit" className={classes.link}>
           Home
         </Button>
