@@ -15,6 +15,9 @@ import axios from 'axios';
 
 const CarsPage = () => {
   const [filter, setFilter] = useState('');
+  const [filter2, setFilter2] = useState('');
+  const [filter3, setFilter3] = useState('');
+  const [filter4, setFilter4] = useState('');
   const [carList, setCarList] = useState([]);
   const [openAddCar, setOpenAddCar] = useState(false);
   const [openDeleteCar, setOpenDeleteCar] = useState(false);
@@ -38,7 +41,7 @@ const CarsPage = () => {
   const fetchCarList = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/v1/car/');
-      setCarList(response.data);
+      setCarList(response.data.content);
     } catch (error) {
       console.error('Error fetching car list:', error);
     }
@@ -50,6 +53,18 @@ const CarsPage = () => {
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
+  };
+
+  const handleFilterChange2 = (e) => {
+    setFilter2(e.target.value);
+  };
+
+  const handleFilterChange3 = (e) => {
+    setFilter3(e.target.value);
+  };
+
+  const handleFilterChange4 = (e) => {
+    setFilter4(e.target.value);
   };
 
   const handleAddCar = async () => {
@@ -105,8 +120,11 @@ const CarsPage = () => {
   const handleFilter = async () => {
     try {
       // Send GET request to API with filter query params
-      const response = await axios.get(`http://localhost:8080/api/v1/car/?filter=${filter}`); // Replace with your API endpoint
-      setCarList(response.data);
+      await axios.get(`http://localhost:8080/api/v1/car/?filter=${filter}`).then((response) => {
+        setCarList(response.data.content);
+      })
+; // Replace with your API endpoint
+      // setCarList(response.data.content);
     } catch (error) {
       console.error('Error filtering car list:', error);
     }
@@ -131,22 +149,22 @@ const CarsPage = () => {
             label="CarBrand"
             variant="outlined"
             fullWidth
-            value={filter}
-            onChange={handleFilterChange}
+            value={filter2}
+            onChange={handleFilterChange2}
           />
           <TextField
             label="Max Rental Price"
             variant="outlined"
             fullWidth
-            value={filter}
-            onChange={handleFilterChange}
+            value={filter3}
+            onChange={handleFilterChange3}
           />
           <TextField
             label="Min Rental Price"
             variant="outlined"
             fullWidth
-            value={filter}
-            onChange={handleFilterChange}
+            value={filter4}
+            onChange={handleFilterChange4}
           />
           <Button variant="contained" color="primary" fullWidth onClick={handleFilter}>
             Filter
@@ -167,15 +185,14 @@ const CarsPage = () => {
             </div>
           </Box>
           <div>
-            {carList.content ? (
-              carList.content.map((item) => (
+            {
+              carList.map((item) => (
                 <div>
                   <Grid item xs={4} key={item.id}>
                     <Paper elevation={3} style={{ padding: '16px' }}>
                       <img src={item.images[0]} alt="Araba Resmi" />
                       <Typography variant="h6">{item.brand}</Typography>
                       <Typography variant="subtitle1">{item.model}</Typography>
-
                       <Typography variant="body2">Gear: {item.gear}</Typography>
                       <Typography variant="body2">Km: {item.km}</Typography>
                       <Typography variant="body2">Year: {item.year}</Typography>
@@ -184,15 +201,13 @@ const CarsPage = () => {
                       <Typography variant="body2">Description: {item.description}</Typography>
 
 
-                      <button onClick={() => { handleDeleteCar(item.id) }} style={{ float: 'right', backgroundColor: '#d61111d4' }} class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded  hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Arabayı sil</button>
+                      <button onClick={() => { handleDeleteCar(item.id) }} style={{ float: 'right', backgroundColor: '#d61111d4' }} class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded  hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Delete Car</button>
 
                     </Paper>
                   </Grid>
                 </div>
               ))
-            ) : (
-              <div>Loading...</div>
-            )}
+             }
           </div>
           {/* {Array.isArray(carList) ? (
   carList.map((car) => (
