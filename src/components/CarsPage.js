@@ -19,16 +19,16 @@ const CarsPage = () => {
   const [openAddCar, setOpenAddCar] = useState(false);
   const [openDeleteCar, setOpenDeleteCar] = useState(false);
   const [addCarData, setAddCarData] = useState({
-    brand: '',
+    carBrand: '',
     model: '',
     gear: '',
-    km: '',
-    year: '',
+    km: 0,
+    year: 0,
     color: '',
-    dailyRentalPrice: '',
-    image: '',
+    dailyRentalPrice: 0,
     description: '',
-    username: '',
+    ownerId: '',
+    image: [],
   });
 
   const [deleteCarData, setDeleteCarData] = useState({
@@ -54,21 +54,22 @@ const CarsPage = () => {
 
   const handleAddCar = async () => {
     try {
+      console.log("düstü")
       // Send POST request to API with addCarData
       await axios.post('http://localhost:8080/api/v1/car/save', addCarData); // Replace with your API endpoint
 
       // Clear addCarData
       setAddCarData({
-        brand: '',
+        carBrand: '',
         model: '',
         gear: '',
-        km: '',
-        year: '',
+        km: 0,
+        year: 0,
         color: '',
-        dailyRentalPrice: '',
-        image: '',
+        dailyRentalPrice: 0,
         description: '',
-        username: '',
+        ownerId: '',
+        image: [],
       });
 
       // Fetch updated car list from API
@@ -81,21 +82,21 @@ const CarsPage = () => {
     }
   };
 
-  const handleDeleteCar = async () => {
+  const handleDeleteCar = async (carid) => {
     try {
       // Send DELETE request to API with deleteCarData
-      await axios.delete(`http://localhost:8080/api/v1/car/delete/${deleteCarData.carId}`); // Replace with your API endpoint
+      await axios.delete(`http://localhost:8080/api/v1/car/delete/${carid}`); // Replace with your API endpoint
 
       // Clear deleteCarData
-      setDeleteCarData({
-        carId: '',
-      });
+      // setDeleteCarData({
+      //   carId: '',
+      // });
 
       // Fetch updated car list from API
       fetchCarList();
 
       // Close delete car dialog
-      setOpenDeleteCar(false);
+      // setOpenDeleteCar(false);
     } catch (error) {
       console.error('Error deleting car:', error);
     }
@@ -127,7 +128,7 @@ const CarsPage = () => {
             onChange={handleFilterChange}
           />
           <TextField
-            label="Brand"
+            label="CarBrand"
             variant="outlined"
             fullWidth
             value={filter}
@@ -171,6 +172,7 @@ const CarsPage = () => {
                 <div>
                   <Grid item xs={4} key={item.id}>
                     <Paper elevation={3} style={{ padding: '16px' }}>
+                      <img src={item.images[0]} alt="Araba Resmi" />
                       <Typography variant="h6">{item.brand}</Typography>
                       <Typography variant="subtitle1">{item.model}</Typography>
 
@@ -180,7 +182,10 @@ const CarsPage = () => {
                       <Typography variant="body2">Color: {item.color}</Typography>
                       <Typography variant="body2">Daily Rental Price: {item.dailyRentalPrice}</Typography>
                       <Typography variant="body2">Description: {item.description}</Typography>
-                      <Typography variant="body2">Username: {item.ero}</Typography>
+
+
+                      <button onClick={() => { handleDeleteCar(item.id) }} style={{ float: 'right', backgroundColor: '#d61111d4' }} class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded  hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Arabayı sil</button>
+
                     </Paper>
                   </Grid>
                 </div>
@@ -218,11 +223,11 @@ const CarsPage = () => {
         <DialogContent>
           {/* Add car form */}
           <TextField
-            label="Brand"
+            label="Carbrand"
             variant="outlined"
             fullWidth
-            value={addCarData.brand}
-            onChange={(e) => setAddCarData({ ...addCarData, brand: e.target.value })}
+            value={addCarData.carBrand}
+            onChange={(e) => setAddCarData({ ...addCarData, carBrand: e.target.value })}
           />
           <TextField
             label="Model"
@@ -266,13 +271,13 @@ const CarsPage = () => {
             value={addCarData.dailyRentalPrice}
             onChange={(e) => setAddCarData({ ...addCarData, dailyRentalPrice: e.target.value })}
           />
-          <TextField
+          {/* <TextField
             label="Image"
             variant="outlined"
             fullWidth
             value={addCarData.image}
             onChange={(e) => setAddCarData({ ...addCarData, image: e.target.value })}
-          />
+          /> */}
           <TextField
             label="Description"
             variant="outlined"
@@ -281,11 +286,18 @@ const CarsPage = () => {
             onChange={(e) => setAddCarData({ ...addCarData, description: e.target.value })}
           />
           <TextField
-            label="Username"
+            label="Images"
+            variant="outlined"
+            fullWidth
+            value={addCarData.image}
+            onChange={(e) => setAddCarData({ ...addCarData, image: [e.target.value] })} // Resim URL'sini bir diziye yerleştirin
+          />
+          <TextField
+            label="OwnerId"
             variant="outlined"
             fullWidth
             value={addCarData.username}
-            onChange={(e) => setAddCarData({ ...addCarData, username: e.target.value })}
+            onChange={(e) => setAddCarData({ ...addCarData, ownerId: e.target.value })}
           />
         </DialogContent>
         <DialogActions>
@@ -296,25 +308,7 @@ const CarsPage = () => {
         </DialogActions>
       </Dialog>
       {/* Delete Car Dialog */}
-      <Dialog open={openDeleteCar} onClose={() => setOpenDeleteCar(false)}>
-        <DialogTitle>Delete Car</DialogTitle>
-        <DialogContent>
-          {/* Delete car form */}
-          <TextField
-            label="Car ID"
-            variant="outlined"
-            fullWidth
-            value={deleteCarData.carId}
-            onChange={(e) => setDeleteCarData({ ...deleteCarData, carId: e.target.value })}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDeleteCar(false)}>Cancel</Button>
-          <Button onClick={handleDeleteCar} color="secondary">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+
     </Grid>
   );
 };
