@@ -35,19 +35,18 @@ const CarsPage = () => {
     carId: '',
   });
 
-  useEffect(() => {
-    // Fetch car list from API
-    fetchCarList();
-  }, []);
-
   const fetchCarList = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/v1/car/'); // Replace with your API endpoint
+      const response = await axios.get('http://localhost:8080/api/v1/car/');
       setCarList(response.data);
     } catch (error) {
       console.error('Error fetching car list:', error);
     }
   };
+
+  useEffect(() => {
+    fetchCarList();
+  }, []);
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
@@ -114,6 +113,7 @@ const CarsPage = () => {
 
   return (
     <Grid container spacing={2}>
+
       <Grid item xs={3}>
         <Paper>
           <Typography variant="h6" gutterBottom>
@@ -165,13 +165,37 @@ const CarsPage = () => {
               </Button>
             </div>
           </Box>
-          {Array.isArray(carList) ? (
+          <div>
+            {carList.content ? (
+              carList.content.map((item) => (
+                <div>
+                  <Grid item xs={4} key={item.id}>
+                    <Paper elevation={3} style={{ padding: '16px' }}>
+                      <Typography variant="h6">{item.brand}</Typography>
+                      <Typography variant="subtitle1">{item.model}</Typography>
+
+                      <Typography variant="body2">Gear: {item.gear}</Typography>
+                      <Typography variant="body2">Km: {item.km}</Typography>
+                      <Typography variant="body2">Year: {item.year}</Typography>
+                      <Typography variant="body2">Color: {item.color}</Typography>
+                      <Typography variant="body2">Daily Rental Price: {item.dailyRentalPrice}</Typography>
+                      <Typography variant="body2">Description: {item.description}</Typography>
+                      <Typography variant="body2">Username: {item.ero}</Typography>
+                    </Paper>
+                  </Grid>
+                </div>
+              ))
+            ) : (
+              <div>Loading...</div>
+            )}
+          </div>
+          {/* {Array.isArray(carList) ? (
   carList.map((car) => (
     <Grid item xs={4} key={car.id}>
       <Paper elevation={3} style={{ padding: '16px' }}>
         <Typography variant="h6">{car.brand}</Typography>
         <Typography variant="subtitle1">{car.model}</Typography>
-        {/* Diğer araba detaylarını görüntüle */}
+  
         <Typography variant="body2">Gear: {car.gear}</Typography>
         <Typography variant="body2">Km: {car.km}</Typography>
         <Typography variant="body2">Year: {car.year}</Typography>
@@ -184,7 +208,7 @@ const CarsPage = () => {
   ))
 ) : (
   <Typography variant="body2">Araba listesi yükleniyor...</Typography>
-)}
+)} */}
 
         </Paper>
       </Grid>
