@@ -1,32 +1,42 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, makeStyles, Button, Link } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+
+const useStyles = makeStyles((theme) => ({
+  appBar: {
+    backgroundColor: '#2196f3',
+  },
+  title: {
+    flexGrow: 1,
+    textAlign: 'center',
+  },
+  link: {
+    margin: theme.spacing(1),
+    color: '#ffffff',
+    textDecoration: 'none',
+  },
+}));
 
 const Header = () => {
+  const classes = useStyles();
+
   return (
-    <nav className="navbar">
-      <div className="container">
-        <Link to="/" className="navbar-brand">
+    <AppBar position="static" className={classes.appBar}>
+      <Toolbar>
+        <Typography variant="h6" className={classes.title}>
           DriveLux
-        </Link>
-        <ul className="nav-list">
-          <li className="nav-item">
-            <Link to="/" className="nav-link">
-              Home
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/cars" className="nav-link">
-              Cars
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/reservations" className="nav-link">
-              Reservations
-            </Link>
-          </li>
-        </ul>
-      </div>
-    </nav>
+        </Typography>
+        <Button component={RouterLink} to="/" color="inherit" className={classes.link}>
+          Home
+        </Button>
+        <Button component={RouterLink} to="/cars" color="inherit" className={classes.link}>
+          Cars
+        </Button>
+        <Button component={RouterLink} to="/reservations" color="inherit" className={classes.link}>
+          Reservations
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 
