@@ -187,7 +187,7 @@ const CarsPage = () => {
                 <div>
                   <Grid item xs={4} key={item.id}>
                     <Paper elevation={3} style={{ padding: '16px' }}>
-                      <img src={item.images[0]} alt="Araba Resmi" />
+                      <img src={item.images[0]} alt="Photo (Optional)" />
                       <Typography variant="h6">{item.carBrand}</Typography>
                       <Typography variant="subtitle1">{item.model}</Typography>
 
@@ -199,7 +199,7 @@ const CarsPage = () => {
                       <Typography variant="body2">Description: {item.description}</Typography>
 
 
-                      <button onClick={() => { handleDeleteCar(item.id) }} style={{ float: 'right', backgroundColor: '#d61111d4' }} class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded  hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Arabayı sil</button>
+                      <button onClick={() => { handleDeleteCar(item.id) }} style={{ float: 'right', backgroundColor: '#d61111d4' }} class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded  hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Delete Car</button>
 
                     </Paper>
                   </Grid>
