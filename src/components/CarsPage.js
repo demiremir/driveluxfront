@@ -41,7 +41,7 @@ const CarsPage = () => {
   const fetchCarList = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/v1/car/');
-      setCarList(response.data.content);
+      setCarList(response.data);
     } catch (error) {
       console.error('Error fetching car list:', error);
     }
@@ -120,11 +120,8 @@ const CarsPage = () => {
   const handleFilter = async () => {
     try {
       // Send GET request to API with filter query params
-      await axios.get(`http://localhost:8080/api/v1/car/?filter=${filter}`).then((response) => {
-        setCarList(response.data.content);
-      })
-; // Replace with your API endpoint
-      // setCarList(response.data.content);
+      const response = await axios.get(`http://localhost:8080/api/v1/car/?page=0&size=10&model=${filter}`); // Replace with your API endpoint
+      setCarList(response.data);
     } catch (error) {
       console.error('Error filtering car list:', error);
     }
@@ -185,14 +182,15 @@ const CarsPage = () => {
             </div>
           </Box>
           <div>
-            {
-              carList.map((item) => (
+            {carList.content ? (
+              carList.content.map((item) => (
                 <div>
                   <Grid item xs={4} key={item.id}>
                     <Paper elevation={3} style={{ padding: '16px' }}>
                       <img src={item.images[0]} alt="Araba Resmi" />
-                      <Typography variant="h6">{item.brand}</Typography>
+                      <Typography variant="h6">{item.carBrand}</Typography>
                       <Typography variant="subtitle1">{item.model}</Typography>
+
                       <Typography variant="body2">Gear: {item.gear}</Typography>
                       <Typography variant="body2">Km: {item.km}</Typography>
                       <Typography variant="body2">Year: {item.year}</Typography>
@@ -201,13 +199,15 @@ const CarsPage = () => {
                       <Typography variant="body2">Description: {item.description}</Typography>
 
 
-                      <button onClick={() => { handleDeleteCar(item.id) }} style={{ float: 'right', backgroundColor: '#d61111d4' }} class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded  hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Delete Car</button>
+                      <button onClick={() => { handleDeleteCar(item.id) }} style={{ float: 'right', backgroundColor: '#d61111d4' }} class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded  hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Arabayı sil</button>
 
                     </Paper>
                   </Grid>
                 </div>
               ))
-             }
+            ) : (
+              <div>Loading...</div>
+            )}
           </div>
           {/* {Array.isArray(carList) ? (
   carList.map((car) => (
