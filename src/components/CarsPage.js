@@ -30,6 +30,7 @@ const CarsPage = () => {
     description: '',
     username: '',
   });
+
   const [deleteCarData, setDeleteCarData] = useState({
     carId: '',
   });
@@ -41,7 +42,7 @@ const CarsPage = () => {
 
   const fetchCarList = async () => {
     try {
-      const response = await axios.get('/api/cars'); // Replace with your API endpoint
+      const response = await axios.get('http://localhost:8080/api/v1/car/'); // Replace with your API endpoint
       setCarList(response.data);
     } catch (error) {
       console.error('Error fetching car list:', error);
@@ -55,7 +56,7 @@ const CarsPage = () => {
   const handleAddCar = async () => {
     try {
       // Send POST request to API with addCarData
-      await axios.post('/api/cars', addCarData); // Replace with your API endpoint
+      await axios.post('http://localhost:8080/api/v1/car/save', addCarData); // Replace with your API endpoint
 
       // Clear addCarData
       setAddCarData({
@@ -84,7 +85,7 @@ const CarsPage = () => {
   const handleDeleteCar = async () => {
     try {
       // Send DELETE request to API with deleteCarData
-      await axios.delete(`/api/cars/${deleteCarData.carId}`); // Replace with your API endpoint
+      await axios.delete(`http://localhost:8080/api/v1/car/delete/${deleteCarData.carId}`); // Replace with your API endpoint
 
       // Clear deleteCarData
       setDeleteCarData({
@@ -104,7 +105,7 @@ const CarsPage = () => {
   const handleFilter = async () => {
     try {
       // Send GET request to API with filter query params
-      const response = await axios.get(`/api/cars?filter=${filter}`); // Replace with your API endpoint
+      const response = await axios.get(`http://localhost:8080/api/v1/car/?filter=${filter}`); // Replace with your API endpoint
       setCarList(response.data);
     } catch (error) {
       console.error('Error filtering car list:', error);
@@ -164,17 +165,27 @@ const CarsPage = () => {
               </Button>
             </div>
           </Box>
-          <Grid container spacing={2} style={{ padding: '16px' }}>
-            {carList.map((car) => (
-              <Grid item xs={4} key={car.id}>
-                <Paper elevation={3} style={{ padding: '16px' }}>
-                  <Typography variant="h6">{car.brand}</Typography>
-                  <Typography variant="subtitle1">{car.model}</Typography>
-                  {/* Display other car details */}
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
+          {Array.isArray(carList) ? (
+  carList.map((car) => (
+    <Grid item xs={4} key={car.id}>
+      <Paper elevation={3} style={{ padding: '16px' }}>
+        <Typography variant="h6">{car.brand}</Typography>
+        <Typography variant="subtitle1">{car.model}</Typography>
+        {/* Diğer araba detaylarını görüntüle */}
+        <Typography variant="body2">Gear: {car.gear}</Typography>
+        <Typography variant="body2">Km: {car.km}</Typography>
+        <Typography variant="body2">Year: {car.year}</Typography>
+        <Typography variant="body2">Color: {car.color}</Typography>
+        <Typography variant="body2">Daily Rental Price: {car.dailyRentalPrice}</Typography>
+        <Typography variant="body2">Description: {car.description}</Typography>
+        <Typography variant="body2">Username: {car.username}</Typography>
+      </Paper>
+    </Grid>
+  ))
+) : (
+  <Typography variant="body2">Araba listesi yükleniyor...</Typography>
+)}
+
         </Paper>
       </Grid>
       {/* Add Car Dialog */}
