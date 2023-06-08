@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Button, TextField, Grid, Paper, Typography } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -16,14 +18,34 @@ const LoginForm = () => {
   };
 
   const handleLogin = () => {
-    // API isteği gönderme işlemleri
     const data = { username, password };
-    axios.post('your_login_api_url', data)
+    axios.post('http://localhost:8080/api/auth/login', data)
       .then(response => {
-        // Başarılı giriş işlemiyle ilgili işlemler
+        Swal.fire({
+          title: 'Success',
+          text: 'Login successful!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          navigate('/cars'); // /cars sayfasına yönlendirme
+        });
       })
       .catch(error => {
-        // Hata durumlarıyla ilgili işlemler
+        if (error.response && error.response.data.message === 'Invalid username or password') {
+          Swal.fire({
+            title: 'Error',
+            text: 'Invalid username or password',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'Login failed!',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
       });
   };
 

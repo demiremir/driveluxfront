@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, TextField, Grid, Paper, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const SignupForm = () => {
   const [username, setUsername] = useState('');
@@ -16,14 +17,32 @@ const SignupForm = () => {
   };
 
   const handleSignup = () => {
-    // API isteği gönderme işlemleri
     const data = { username, password };
-    axios.post('your_signup_api_url', data)
+    axios.post('http://localhost:8080/api/auth/signup', data)
       .then(response => {
-        // Başarılı kayıt işlemiyle ilgili işlemler
+        Swal.fire({
+          title: 'Success',
+          text: 'Signup successful!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
       })
       .catch(error => {
-        // Hata durumlarıyla ilgili işlemler
+        if (error.response && error.response.data.message === 'User already exists') {
+          Swal.fire({
+            title: 'Error',
+            text: 'User already exists',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'Signup failed!',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
       });
   };
 
